@@ -1,0 +1,472 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>建泰实时监控系统</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="https://www.layuicdn.com/layui-v2.5.6/css/layui.css">
+    <script src="../js/f2.min.js"></script>
+    <script src="../js/jquery.min.js"></script>
+    <script src="https://www.layuicdn.com/layui-v2.5.6/layui.js"></script>
+<!--    <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">-->
+    <link rel="stylesheet" href="${request.contextPath}/font-awesome-4.7.0/css/font-awesome.min.css">
+
+
+    <style>
+        #tab th{
+            font-size: 18px;
+            font-weight: bold;
+        }
+        #tab tr{
+            font-size: 15px;
+            text-align: left;
+
+        }
+        #tab td{
+            font-weight: bold;
+            font-size: 15px;
+            text-align: left;
+        }
+    </style>
+
+
+</head>
+<body onLoad="javascript:window.resizeTo(screen.availWidth,screen.availHeight);window.moveTo(0,0) ">
+
+<section class="jq22-flexView jq22-head-bj-one">
+    <header class="jq22-navBar jq22-navBar-fixed jq22-navBar-chang" >
+<!--        <a href="javascript:void(0);" class="jq22-navBar-item">-->
+<!--            <i class="icon icon-return"></i>-->
+<!--        </a>-->
+        <div class="jq22-center">
+            <span class="jq22-center-title">实时监控【<span id="minute" style="color: white">1秒前已刷新</span>】</span>
+
+        </div>
+
+<!--        <a href="${request.contextPath}/user/history" class="jq22-navBar-item">-->
+<!--            <i style="font-size: 30px" class="fa fa-hourglass-o"></i>-->
+<!--        </a>-->
+
+    </header>
+
+    <section class="jq22-scrollView">
+
+
+        <div style="padding: 20px; background-color: #F2F2F2;">
+            <div class="layui-row layui-col-space15">
+
+
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+<!--                        <div class="layui-card-header">-->
+<!--                            设备-->
+<!--                        </div>-->
+
+                        <div class="layui-card-body">
+                            <!--                    <table class="layui-hide" id="test"></table>-->
+
+                            <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                                <ul class="layui-tab-title" lay-filter="demo">
+                                    <#list dataList as l>
+                                            <#if (l_index + 1) == 1>
+                                            <li class="layui-this">${l.name}</li>
+                                            <#else>
+                                            <li>${l.name}</li>
+                                        </#if>
+                                    </#list>
+                                </ul>
+                            <div class="layui-tab-content">
+
+                                <#list dataList as l>
+                                    <#if (l_index) == 0 >
+                                        <div class="layui-tab-item layui-show">
+                                    <#else>
+                                        <div class="layui-tab-item">
+                                    </#if>
+
+                                            <span id="data_time_${l.name}" style="color: coral;">【${l.time}】</span>
+                                        <div class="jq22-data-box">
+                                            <table id="tab" >
+                                                <thead>
+                                                <tr>
+                                                    <th>&nbsp;&nbsp;名称</th>
+                                                    <th>正常</th>
+                                                    <th>实时</th>
+                                                    <th>单位</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                <tr>
+                                                    <td>烟气流速</td>
+                                                    <td>0~100</td>
+
+                                                    <#list rangeList as rl>
+
+                                                        <#if rl.name == "yqls" >
+
+                                                            <#if (rl.min <= l.yqls?number) && (l.yqls?number <= rl.max) >
+                                                                <td id="${l.name}_yqls" style="color: green"> ${l.yqls}</td>
+                                                            <#else>
+                                                                <td id="${l.name}_yqls" style="color: red"> ${l.yqls}</td>
+                                                            </#if>
+                                                        </#if>
+
+                                                    </#list>
+
+                                                    <td>m/s</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>烟气温度</td>
+                                                    <td>0~400</td>
+
+                                                    <#list rangeList as rl>
+                                                        <#if rl.name == "yqwd" >
+                                                            <#if (rl.min <= l.yqwd?number) && (l.yqwd?number <= rl.max) >
+                                                                <td id="${l.name}_yqwd" style="color: green"> ${l.yqwd}</td>
+                                                            <#else>
+                                                                <td id="${l.name}_yqwd" style="color: red"> ${l.yqwd}</td>
+                                                            </#if>
+                                                         </#if>
+                                                    </#list>
+
+                                                    <td>℃</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>烟气压力</td>
+                                                    <td>± 10000</td>
+
+                                                    <#list rangeList as rl>
+                                                        <#if rl.name == "yqyl" >
+                                                            <#if (rl.min <= l.yqyl?number) && (l.yqyl?number <= rl.max) >
+                                                            <td id="${l.name}_yqyl" style="color: green"> ${l.yqyl}</td>
+                                                            <#else>
+                                                            <td id="${l.name}_yqyl" style="color: red"> ${l.yqyl}</td>
+                                                            </#if>
+                                                        </#if>
+                                                    </#list>
+
+                                                    <td>Pa</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>烟气湿度</td>
+                                                    <td>0~100</td>
+                                                    <#list rangeList as rl>
+                                                        <#if rl.name == "yqsd" >
+                                                            <#if (rl.min <= l.yqsd?number) && (l.yqsd?number <= rl.max) >
+                                                            <td id="${l.name}_yqsd" style="color: green"> ${l.yqsd}</td>
+                                                            <#else>
+                                                            <td id="${l.name}_yqsd" style="color: red"> ${l.yqsd}</td>
+                                                             </#if>
+                                                        </#if>
+                                                    </#list>
+
+                                                     <td>%</td>
+                                                </tr>
+
+
+                                                <tr>
+                                                    <td>甲烷(干)</td>
+                                                    <td>0~100</td>
+
+                                                    <#list rangeList as rl>
+                                                         <#if rl.name == "jw" >
+                                                            <#if (rl.min <= l.jw?number) && (l.jw?number <= rl.max) >
+                                                            <td id="${l.name}_jw" style="color: green"> ${l.jw}</td>
+                                                            <#else>
+                                                            <td id="${l.name}_jw" style="color: red"> ${l.jw}</td>
+                                                             </#if>
+                                                        </#if>
+                                                    </#list>
+
+                                                    <td>mg/m³</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>非甲烷总烃(干)</td>
+                                                    <td>120</td>
+                                                    <#list rangeList as rl>
+                                                        <#if rl.name == "fjwztg" >
+                                                            <#if (rl.min <= l.fjwztg?number) && (l.fjwztg?number <= rl.max) >
+                                                            <td id="${l.name}_fjwztg" style="color: green"> ${l.fjwztg}</td>
+                                                            <#else>
+                                                            <td id="${l.name}_fjwztg" style="color: red"> ${l.fjwztg}</td>
+                                                            </#if>
+                                                         </#if>
+                                                    </#list>
+
+                                                    <td>mg/m³</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>总烃</td>
+                                                    <td>0~100</td>
+
+                                                    <#list rangeList as rl>
+                                                        <#if rl.name == "zt" >
+                                                            <#if (rl.min <= l.zt?number) && (l.zt?number <= rl.max) >
+                                                            <td id="${l.name}_zt" style="color: green"> ${l.zt}</td>
+                                                            <#else>
+                                                            <td id="${l.name}_zt" style="color: red"> ${l.zt}</td>
+                                                            </#if>
+                                                        </#if>
+                                                    </#list>
+
+                                                    <td>mg/m³</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>非甲烷总烃(排标)</td>
+                                                    <td>0~100</td>
+
+                                                    <#list rangeList as rl>
+                                                        <#if rl.name == "fjwztp" >
+                                                            <#if (rl.min <= l.fjwztp?number) && (l.fjwztp?number <= rl.max) >
+                                                            <td id="${l.name}_fjwztp" style="color: green"> ${l.fjwztp}</td>
+                                                            <#else>
+                                                            <td id="${l.name}_fjwztp" style="color: red"> ${l.fjwztp}</td>
+                                                            </#if>
+                                                        </#if>
+                                                    </#list>
+
+
+                                                    <td>kg/h</td>
+                                                </tr><tr>
+                                                    <td>苯(干)</td>
+                                                    <td>12</td>
+
+                                                    <#list rangeList as rl>
+                                                        <#if rl.name == "ben" >
+                                                            <#if (rl.min <= l.ben?number) && (l.ben?number <= rl.max) >
+                                                            <td id="${l.name}_ben" style="color: green"> ${l.ben}</td>
+                                                            <#else>
+                                                            <td id="${l.name}_ben" style="color: red"> ${l.ben}</td>
+                                                            </#if>
+                                                        </#if>
+                                                    </#list>
+
+                                                    <td>mg/m³</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>甲苯(干)</td>
+                                                    <td>40</td>
+
+                                                    <#list rangeList as rl>
+                                                        <#if rl.name == "jb" >
+                                                            <#if (rl.min <= l.jb?number) && (l.jb?number <= rl.max) >
+                                                            <td id="${l.name}_jb" style="color: green"> ${l.jb}</td>
+                                                            <#else>
+                                                            <td id="${l.name}_jb" style="color: red"> ${l.jb}</td>
+                                                            </#if>
+                                                        </#if>
+                                                    </#list>
+
+                                                    <td>mg/m³</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>二甲苯(干)</td>
+                                                    <td>70</td>
+
+                                                    <#list rangeList as rl>
+                                                        <#if rl.name == "ejb" >
+                                                            <#if (rl.min <= l.ejb?number) && (l.ejb?number <= rl.max) >
+                                                            <td id="${l.name}_ejb" style="color: green"> ${l.ejb}</td>
+                                                            <#else>
+                                                            <td id="${l.name}_ejb" style="color: red"> ${l.ejb}</td>
+                                                            </#if>
+                                                        </#if>
+                                                    </#list>
+
+                                                    <td>mg/m³</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>间二甲苯(干)</td>
+                                                    <td>0~100</td>
+
+                                                    <#list rangeList as rl>
+                                                        <#if rl.name == "jejb" >
+                                                            <#if (rl.min <= l.jejb?number) && (l.jejb?number <= rl.max) >
+                                                            <td id="${l.name}_jejb" style="color: green"> ${l.jejb}</td>
+                                                            <#else>
+                                                            <td id="${l.name}_jejb" style="color: red"> ${l.jejb}</td>
+                                                            </#if>
+                                                        </#if>
+                                                    </#list>
+
+                                                    <td>mg/m³</td>
+                                                </tr><tr>
+                                                    <td>邻二甲苯(干)</td>
+                                                    <td>0~100</td>
+
+                                                    <#list rangeList as rl>
+                                                        <#if rl.name == "lejb" >
+                                                            <#if (rl.min <= l.lejb?number) && (l.lejb?number <= rl.max) >
+                                                            <td id="${l.name}_lejb" style="color: green"> ${l.lejb}</td>
+                                                            <#else>
+                                                            <td id="${l.name}_lejb" style="color: red"> ${l.lejb}</td>
+                                                             </#if>
+                                                        </#if>
+                                                    </#list>
+
+                                                    <td>mg/m³</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>O2(干)</td>
+                                                    <td>0~25</td>
+
+                                                    <#list rangeList as rl>
+                                                        <#if rl.name == "o2" >
+                                                            <#if (rl.min <= l.o2?number) && (l.o2?number <= rl.max) >
+                                                            <td id="${l.name}_o2" style="color: green"> ${l.o2}</td>
+                                                            <#else>
+                                                            <td id="${l.name}_o2" style="color: red"> ${l.o2}</td>
+                                                             </#if>
+                                                        </#if>
+                                                    </#list>
+
+                                                    <td>%</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>标态干烟气流量</td>
+                                                    <td>-</td>
+                                                    <td id="${l.name}_btgyqll"> ${l.btgyqll}</td>
+
+
+                                                    <td>m³/h</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>烟道截面积</td>
+                                                    <td>-</td>
+                                                    <td id="${l.name}_ydjmj"> ${l.ydjmj}</td>
+
+
+                                                    <td>㎡</td>
+                                                </tr>
+
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+
+                                    </div>
+                                </#list>
+
+
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+
+
+
+</section>
+</section>
+
+
+</body>
+
+
+<script>
+    $(function () {
+
+        setInterval('add_minute()', 1000 * 1);
+        getData();
+        setInterval('getData()', 1000 * 5);
+    })
+
+    function getData() {
+        $.ajax({
+            url:"getLatestData",
+            dataType:"json",
+            type:"get",
+            success:function (data) {
+
+                console.log(data.data)
+                for(i = 0;i<data.data.length;i++){
+
+                    var time_id = "data_time_" + data.data[i].name;
+                    $("#"+time_id).text("【" + data.data[i].time + "】")
+
+                    var yqls = data.data[i].yqls;
+                    var yqls_id = data.data[i].name+"_yqls";
+                    $("#"+yqls_id).html(yqls);
+                    var yqwd = data.data[i].yqwd;
+                    var yqwd_id = data.data[i].name+"_yqwd";
+                    $("#"+yqwd_id).html(yqwd);
+                    var yqyl = data.data[i].yqyl;
+                    var yqyl_id = data.data[i].name+"_yqyl";
+                    $("#"+yqyl_id).html(yqyl);
+                    var yqsd = data.data[i].yqsd;
+                    var yqsd_id = data.data[i].name+"_yqsd";
+                    $("#"+yqsd_id).html(yqsd);
+                    var jw = data.data[i].jw;
+                    var jw_id = data.data[i].name+"_jw";
+                    $("#"+jw_id).html(jw);
+                    var fjwztg = data.data[i].fjwztg;
+                    var fjwztg_id = data.data[i].name+"_fjwztg";
+                    $("#"+fjwztg_id).html(fjwztg);
+                    var zt = data.data[i].zt;
+                    var zt_id = data.data[i].name+"_zt";
+                    $("#"+zt_id).html(zt);
+                    var fjwztp = data.data[i].fjwztp;
+                    var fjwztp_id = data.data[i].name+"_fjwztp";
+                    $("#"+fjwztp_id).html(fjwztp);
+                    var ben = data.data[i].ben;
+                    var ben_id = data.data[i].name+"_ben";
+                    $("#"+ben_id).html(ben);
+                    var jb = data.data[i].jb;
+                    var jb_id = data.data[i].name+"_jb";
+                    $("#"+jb_id).html(jb);
+                    var ejb = data.data[i].ejb;
+                    var ejb_id = data.data[i].name+"_ejb";
+                    $("#"+ejb_id).html(ejb);
+                    var jejb = data.data[i].jejb;
+                    var jejb_id = data.data[i].name+"_jejb";
+                    $("#"+jejb_id).html(jejb);
+                    var lejb = data.data[i].lejb;
+                    var lejb_id = data.data[i].name+"_lejb";
+                    $("#"+lejb_id).html(lejb);
+                    var o2 = data.data[i].o2;
+                    var o2_id = data.data[i].name+"_o2";
+                    $("#"+o2_id).html(o2);
+                    var btgyqll = data.data[i].btgyqll;
+                    var btgyqll_id = data.data[i].name+"_btgyqll";
+                    $("#"+btgyqll_id).text(btgyqll);
+                    var ydjmj = data.data[i].ydjmj;
+                    var ydjmj_id = data.data[i].name+"_ydjmj";
+                    $("#"+ydjmj_id).text(ydjmj);
+                }
+                document.getElementById("minute").innerText = "0秒前已刷新";
+
+            }
+        })
+    }
+function logout() {
+    //location.href = "${request.contextPath}/user/logout";
+    if(confirm("此方法退出将需要重新输入账号密码!确定继续退出？"))
+        location.href = "${request.contextPath}/user/logout";
+}
+
+    function add_minute()
+    {
+        var text = document.getElementById("minute").innerText;
+        var text = text.replace("秒前已刷新","");
+        document.getElementById("minute").innerText = (parseInt(text) + 1) + "秒前已刷新";
+    }
+</script>
+<script>
+    layui.use(['element','laydate'], function(){
+        var laydate = layui.laydate;
+        var element = layui.element;
+
+    });
+</script>
+
+
+</html>
